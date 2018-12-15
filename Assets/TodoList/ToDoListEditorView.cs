@@ -1,30 +1,23 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
-public class TodoListView : FUIView {
-
-    [SerializeField] ViewComponent.FUIListView _list;
+class ToDoListEditorView : FUIView
+{
     [SerializeField] InputField _input;
     [SerializeField] Text _ShowStyleText;
     [SerializeField] Toggle toggle;
+
     protected override void OnViewInited()
     {
         base.OnViewInited();
-        var listdata = TodoListViewModelAgent.ViewModel.ListItems;
-        Bind(listdata.Count, c =>
-        {
-            _list.ElementCount = c;
-            for(int i = 0;i<_list.ElementCount;++i)
-            {
-                var element = _list.GetElement(i);
-                element.GetComponent<TodoItemView>().SetItem(listdata[i]);
-            }
-        });
         Bind(TodoListViewModelAgent.ViewModel.ShowStyle, (s) =>
         {
-             toggle.isOn = s == ToDoShowStyle.ShowAll;
-             _ShowStyleText.text = s.ToString();
-         });
+            toggle.isOn = s == ToDoShowStyle.ShowAll;
+            _ShowStyleText.text = s.ToString();
+        });
         toggle.onValueChanged.AddListener(OnToggleShowAll);
     }
     public void OnAddItem()
@@ -41,7 +34,7 @@ public class TodoListView : FUIView {
     }
     public void OnToggleShowAll(bool showAll)
     {
-        if(showAll)
+        if (showAll)
         {
             TodoListAction.SetShowStyle(ToDoShowStyle.ShowAll);
         }
@@ -51,3 +44,4 @@ public class TodoListView : FUIView {
         }
     }
 }
+
